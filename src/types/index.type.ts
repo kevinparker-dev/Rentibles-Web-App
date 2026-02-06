@@ -157,3 +157,52 @@ export type SocialRegisterPayload = {
   idToken: string;
   role: "user";
 };
+
+// For Chat Type Handling
+export interface Message {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar: string;
+  content: string;
+  timestamp: string;
+  isCurrentUser: boolean;
+}
+
+export interface ChatUser {
+  id: string;
+  name: string;
+  avatar: string;
+  initials: string;
+}
+
+// types/wallet.types.ts
+export interface Balance {
+  available: number;
+  pending: number;
+  currency: string;
+}
+
+export enum TransactionStatus {
+  COMPLETED = "completed",
+  PENDING = "pending",
+  FAILED = "failed",
+  PROCESSING = "processing",
+}
+
+export interface WithdrawalRecord {
+  id: string;
+  date: string;
+  status: TransactionStatus;
+  amount: number;
+}
+
+export interface TransactionRecord {
+  id: string;
+  date: string;
+  status: TransactionStatus;
+  amount: number;
+  type?: "credit" | "debit";
+}
+
+export type TabType = "withdrawal" | "transaction";

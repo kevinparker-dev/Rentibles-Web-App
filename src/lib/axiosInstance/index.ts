@@ -2,7 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const baseURL = "https://api.rentibles.com"
 
 let cachedFingerprint: string | null = null;
 
