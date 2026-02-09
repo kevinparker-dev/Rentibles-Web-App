@@ -126,7 +126,8 @@ const CashWithdrawalPage = () => {
             <div className="mb-8">
               <button
                 onClick={handleWithdraw}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-white rounded-lg hover:bg-primary/80 transition-all active:scale-95 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-foreground
+                 text-white rounded-lg hover:bg-primary/80 transition-all active:scale-95 shadow-lg hover:shadow-xl"
               >
                 {/* <ArrowDownToLine className="w-5 h-5" /> */}
                 Withdraw Funds
@@ -135,16 +136,16 @@ const CashWithdrawalPage = () => {
           )}
 
           {/* Tabs Section */}
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-white rounded-lg overflow-hidden ">
             {/* Tab Headers */}
-            <div className="m-2  ">
-              <div className="flex">
+            <div className="m-2 border-2 rounded-2xl">
+              <div className="flex m-1">
                 <button
                   onClick={() => setActiveTab("withdrawal")}
                   className={`flex-1 px-6 py-4 text-sm font-semibold transition-all ${
                     activeTab === "withdrawal"
-                      ? "bg-primary text-white rounded-l-lg"
-                      : "text-foreground hover:text-gray-900 hover:bg-gray-50"
+                      ? "bg-primary text-white rounded-l-xl"
+                      : "text-foreground hover:text-gray-900 hover:bg-gray-50 rounded-l-xl"
                   }`}
                 >
                   Withdrawal History
@@ -153,8 +154,8 @@ const CashWithdrawalPage = () => {
                   onClick={() => setActiveTab("transaction")}
                   className={`flex-1 px-6 py-4 text-sm font-semibold transition-all ${
                     activeTab === "transaction"
-                      ? "bg-primary text-white rounded-r-lg"
-                      : "text-foreground hover:text-gray-900 hover:bg-gray-50"
+                      ? "bg-primary text-white rounded-r-xl"
+                      : "text-foreground hover:text-gray-900 hover:bg-gray-50 rounded-r-xl"
                   }`}
                 >
                   Transaction History

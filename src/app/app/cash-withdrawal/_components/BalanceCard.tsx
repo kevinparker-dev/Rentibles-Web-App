@@ -17,7 +17,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({
   const isAvailable = type === "available";
 
   return (
-    <div className={`relative overflow-hidden rounded-xl p-6 shadow-lg `}>
+    <div className={`relative overflow-hidden rounded-xl p-6 shadow-md `}>
       {/* Content */}
       <div className="relative z-10">
         <div className="flex items-center gap-2 mb-2">

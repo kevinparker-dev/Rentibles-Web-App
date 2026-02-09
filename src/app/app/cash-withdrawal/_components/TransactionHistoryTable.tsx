@@ -1,7 +1,15 @@
 import React from "react";
 
-import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import {
+  ArrowUpRight,
+  ArrowDownLeft,
+  Funnel,
+  FileChartColumnIncreasing,
+  FileDown,
+  ChevronRight,
+} from "lucide-react";
 import { TransactionRecord, TransactionStatus } from "@/src/types/index.type";
+import { formatDateToMMDDYYYY } from "@/src/utils/helperFunctions";
 
 interface TransactionHistoryTableProps {
   data: TransactionRecord[];
@@ -39,9 +47,20 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
 
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center w-full px-4">
+        <h1 className="text-lg font-semibold">Transaction History</h1>
+        <div className="flex gap-2">
+          <div className="bg-primary/20 p-1.5 rounded-md">
+            <FileDown className=" text-primary " />
+          </div>
+          <div className="bg-primary p-1.5 rounded-md">
+            <Funnel className=" text-white " />
+          </div>
+        </div>
+      </div>
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200">
+          <tr className="">
             <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">
               Date
             </th>
@@ -55,43 +74,36 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
         </thead>
         <tbody>
           {data.map((record) => (
-            <tr
-              key={record.id}
-              className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-            >
+            <tr key={record.id} className="">
               <td className="py-4 px-4">
                 <div className="flex items-center gap-2">
-                  {record.type === "credit" ? (
-                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                      <ArrowDownLeft className="w-4 h-4 text-green-600" />
-                    </div>
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                      <ArrowUpRight className="w-4 h-4 text-red-600" />
-                    </div>
-                  )}
                   <span className="text-sm text-gray-900">
                     {/* {formatDate(record.date)} */}
-                    {record.date}
+                    {formatDateToMMDDYYYY(record.date)}
                   </span>
                 </div>
               </td>
               <td className="py-4 px-4">
                 <span
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusStyles(record.status)}`}
+                  className={`inline-flex items-center text-xs font-medium `}
                 >
-                  {getStatusLabel(record.status)}
+                  {record.status}
                 </span>
               </td>
               <td className="py-4 px-4 text-sm font-semibold text-right">
                 <span
                   className={
-                    record.type === "credit" ? "text-green-600" : "text-red-600"
+                    record.type === "credit" ? "text-green-500" : "text-primary"
                   }
                 >
                   {record.type === "credit" ? "+" : "-"}
                   {/* {formatCurrency(record.amount)} */}
                   {record.amount}
+                </span>
+              </td>
+              <td className="py-4 px-4 text-sm font-semibold text-right">
+                <span>
+                  <ChevronRight />
                 </span>
               </td>
             </tr>
