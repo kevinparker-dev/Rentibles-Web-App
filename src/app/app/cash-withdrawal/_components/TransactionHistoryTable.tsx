@@ -90,7 +90,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
                   {record.status}
                 </span>
               </td>
-              <td className="py-4 px-4 text-sm font-semibold text-right">
+              <td className="py-4 px-2 text-sm font-semibold text-right">
                 <span
                   className={
                     record.type === "credit" ? "text-green-500" : "text-primary"
@@ -101,7 +101,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
                   {record.amount}
                 </span>
               </td>
-              <td className="py-4 px-4 text-sm font-semibold text-right">
+              <td className="py-4 px-1 text-sm font-semibold text-right">
                 <span>
                   <ChevronRight />
                 </span>

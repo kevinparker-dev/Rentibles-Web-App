@@ -57,11 +57,14 @@ const StoreCard: React.FC<{ store?: Store }> = ({ store }) => {
             </p>
           </div>
 
-          <Link href={`/app/store/${store?._id}`} className="shrink-0">
-            <Button className="ml-auto bg-primary text-white w-14 h-14 rounded-md flex items-center justify-center">
+          <Button
+            asChild
+            className="ml-auto bg-primary text-white w-14 h-14 rounded-md flex items-center justify-center"
+          >
+            <Link href={`/app/store/${store?._id}`}>
               <ChevronRight className="size-8" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

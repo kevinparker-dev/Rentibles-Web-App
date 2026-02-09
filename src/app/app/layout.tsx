@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import AppNavbar from "./_components/app-navbar";
 import ProtectedRoute from "@/src/routes/ProtectedRoute";

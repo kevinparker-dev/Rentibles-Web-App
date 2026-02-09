@@ -79,8 +79,10 @@ const WithdrawalHistoryTable: React.FC<WithdrawalHistoryTableProps> = ({
                   {record.status}
                 </span>
               </td>
-              <td className="py-4 px-4 text-sm font-semibold text-right text-gray-900">
+              <td className="py-4 px-2 text-sm font-semibold text-right text-gray-900">
                 <span>{record.date}</span>
+              </td>
+              <td className="py-4 px-1 text-sm font-semibold text-right">
                 <span>
                   <ChevronRight />
                 </span>
