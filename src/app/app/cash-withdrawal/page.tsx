@@ -10,8 +10,10 @@ import {
   TabType,
   TransactionRecord,
   TransactionStatus,
+  WithdrawalDetails,
   WithdrawalRecord,
 } from "@/src/types/index.type";
+import WithdrawalDetailsModal from "./_components/WithdrawalDetailsModal";
 
 const mockBalance: Balance = {
   available: 5420.5,
@@ -66,6 +68,9 @@ const mockTransactions: TransactionRecord[] = [
 
 const CashWithdrawalPage = () => {
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<WithdrawalDetails | null>(null);
 
   const [activeTab, setActiveTab] = useState<TabType>("withdrawal");
   const [balance] = useState<Balance>(mockBalance);
@@ -76,6 +81,30 @@ const CashWithdrawalPage = () => {
     alert(
       `Initiating withdrawal from available balance: $${balance.available}`,
     );
+  };
+
+  const handleRowClick = (record: TransactionRecord) => {
+    const details: WithdrawalDetails = {
+      id: record.id,
+      amount: record.amount,
+      currency: "USD",
+      referenceId: `TXN-${record.id.toUpperCase()}-${Date.now()}`,
+      date: record.date,
+      description:
+        record.type === "credit"
+          ? `Payment received from customer #${Math.floor(1000 + Math.random() * 9000)}`
+          : `Payment sent to vendor #${Math.floor(1000 + Math.random() * 9000)}`,
+      // status: getStatusLabel(record.status),
+      status: record.status,
+    };
+
+    setSelectedTransaction(details);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedTransaction(null), 300);
   };
 
   return (
@@ -166,14 +195,25 @@ const CashWithdrawalPage = () => {
             {/* Tab Content */}
             <div className="p-4 sm:p-6">
               {activeTab === "withdrawal" ? (
-                <WithdrawalHistoryTable data={mockWithdrawals} />
+                <WithdrawalHistoryTable
+                  data={mockWithdrawals}
+                  handleRowClick={handleRowClick}
+                />
               ) : (
-                <TransactionHistoryTable data={mockTransactions} />
+                <TransactionHistoryTable
+                  data={mockTransactions}
+                  handleRowClick={handleRowClick}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
+      <WithdrawalDetailsModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        details={selectedTransaction}
+      />
     </div>
   );
 };

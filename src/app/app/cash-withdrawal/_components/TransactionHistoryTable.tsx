@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   ArrowUpRight,
@@ -10,14 +10,19 @@ import {
 } from "lucide-react";
 import { TransactionRecord, TransactionStatus } from "@/src/types/index.type";
 import { formatDateToMMDDYYYY } from "@/src/utils/helperFunctions";
+import DateFilter from "@/src/components/common/DateFilter";
 
 interface TransactionHistoryTableProps {
   data: TransactionRecord[];
+  handleRowClick: (record: TransactionRecord) => void;
 }
 
 const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
   data,
+  handleRowClick,
 }) => {
+  const [filters, setFilters] = useState({});
+  console.log("🚀 ~ TransactionHistoryTable ~ filters:", filters);
   const getStatusStyles = (status: TransactionStatus): string => {
     switch (status) {
       case TransactionStatus.COMPLETED:
@@ -37,6 +42,13 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
+  const handleFilterChange = (filterData: {
+    startDate: string;
+    endDate: string;
+  }) => {
+    setFilters(filterData);
+  };
+
   if (data.length === 0) {
     return (
       <div className="text-center py-12">
@@ -53,9 +65,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
           <div className="bg-primary/20 p-1.5 rounded-md">
             <FileDown className=" text-primary " />
           </div>
-          <div className="bg-primary p-1.5 rounded-md">
-            <Funnel className=" text-white " />
-          </div>
+
+          <DateFilter onFilterChange={handleFilterChange} />
         </div>
       </div>
       <table className="w-full">
@@ -67,7 +78,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
             <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">
               Status
             </th>
-            <th className="text-right py-4 px-4 text-sm font-semibold text-gray-700">
+            <th className="text-right py-4 px-0 text-sm font-semibold text-gray-700">
               Amount
             </th>
           </tr>
@@ -84,9 +95,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
                 </div>
               </td>
               <td className="py-4 px-4">
-                <span
-                  className={`inline-flex items-center text-xs font-medium `}
-                >
+                <span className={`inline-flex items-center text-sm  `}>
                   {record.status}
                 </span>
               </td>
@@ -101,7 +110,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({
                   {record.amount}
                 </span>
               </td>
-              <td className="py-4 px-1 text-sm font-semibold text-right">
+              <td
+                onClick={() => handleRowClick(record)}
+                className="py-4 px-1 text-sm font-semibold text-right cursor-pointer"
+              >
                 <span>
                   <ChevronRight />
                 </span>

@@ -195,6 +195,7 @@ export interface WithdrawalRecord {
   date: string;
   status: TransactionStatus;
   amount: number;
+  type?: "credit" | "debit";
 }
 
 export interface TransactionRecord {
@@ -206,3 +207,37 @@ export interface TransactionRecord {
 }
 
 export type TabType = "withdrawal" | "transaction";
+
+// for withdrawal modal
+export interface WithdrawalDetails {
+  id: string;
+  amount: number;
+  currency: string;
+  referenceId: string;
+  date: Date | string;
+  description: string;
+  status: string;
+}
+
+// types/product-request.types.ts
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface ProductRequest {
+  id: string;
+  productName: string;
+  description: string;
+  storeName: string;
+  category: Category;
+  createdAt: Date;
+  status: "pending" | "approved" | "rejected";
+}
+
+export interface AddProductRequestFormData {
+  categoryId: string;
+  productName: string;
+  description: string;
+}

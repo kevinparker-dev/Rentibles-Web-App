@@ -33,7 +33,7 @@ export const base64ToFile = (base64: string, filename: string) => {
 };
 
 export function formatDateToMMDDYYYY(
-  dateString: string | null | undefined,
+  dateString: string | null | undefined | Date,
 ): string {
   if (!dateString) return "—";
 

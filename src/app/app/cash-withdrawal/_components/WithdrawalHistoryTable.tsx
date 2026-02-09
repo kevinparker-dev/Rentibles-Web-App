@@ -1,17 +1,25 @@
 // components/WithdrawalHistoryTable.tsx
-import { TransactionStatus, WithdrawalRecord } from "@/src/types/index.type";
+import DateFilter from "@/src/components/common/DateFilter";
+import {
+  TransactionRecord,
+  TransactionStatus,
+  WithdrawalRecord,
+} from "@/src/types/index.type";
 import { formatDateToMMDDYYYY } from "@/src/utils/helperFunctions";
 import { ChevronRight, FileDown, Funnel } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 // import { formatDate, formatCurrency } from '../utils/formatters';
 
 interface WithdrawalHistoryTableProps {
   data: WithdrawalRecord[];
+  handleRowClick: (record: TransactionRecord) => void;
 }
 
 const WithdrawalHistoryTable: React.FC<WithdrawalHistoryTableProps> = ({
   data,
+  handleRowClick,
 }) => {
+  const [filters, setFilters] = useState({});
   const getStatusStyles = (status: TransactionStatus): string => {
     switch (status) {
       case TransactionStatus.COMPLETED:
@@ -31,6 +39,13 @@ const WithdrawalHistoryTable: React.FC<WithdrawalHistoryTableProps> = ({
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
+  const handleFilterChange = (filterData: {
+    startDate: string;
+    endDate: string;
+  }) => {
+    setFilters(filterData);
+  };
+
   if (data.length === 0) {
     return (
       <div className="text-center py-12">
@@ -43,13 +58,12 @@ const WithdrawalHistoryTable: React.FC<WithdrawalHistoryTableProps> = ({
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center w-full px-4">
         <h1 className="text-lg font-semibold">Withdrawal History</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 ">
           <div className="bg-primary/20 p-1.5 rounded-md">
             <FileDown className=" text-primary " />
           </div>
-          <div className="bg-primary p-1.5 rounded-md">
-            <Funnel className=" text-white " />
-          </div>
+
+          <DateFilter onFilterChange={handleFilterChange} />
         </div>
       </div>
       <table className="w-full">
@@ -61,7 +75,7 @@ const WithdrawalHistoryTable: React.FC<WithdrawalHistoryTableProps> = ({
             <th className="text-left py-4 px-4 text-sm font-semibold text-gray-700">
               Status
             </th>
-            <th className="text-right py-4 px-4 text-sm font-semibold text-gray-700">
+            <th className="text-right  py-4 px-0 text-sm font-semibold text-gray-700">
               Amount
             </th>
           </tr>
@@ -73,16 +87,25 @@ const WithdrawalHistoryTable: React.FC<WithdrawalHistoryTableProps> = ({
                 {formatDateToMMDDYYYY(record.date)}
               </td>
               <td className="py-4 px-4">
-                <span
-                  className={`inline-flex items-center text-xs font-medium `}
-                >
+                <span className={`inline-flex items-center text-sm `}>
                   {record.status}
                 </span>
               </td>
-              <td className="py-4 px-2 text-sm font-semibold text-right text-gray-900">
-                <span>{record.date}</span>
+              <td className="py-4 px-2 text-sm font-semibold text-right">
+                <span
+                  className={
+                    record.type === "credit" ? "text-green-500" : "text-primary"
+                  }
+                >
+                  {record.type === "credit" ? "+" : "-"}
+                  {/* {formatCurrency(record.amount)} */}
+                  {record.amount}
+                </span>
               </td>
-              <td className="py-4 px-1 text-sm font-semibold text-right">
+              <td
+                onClick={() => handleRowClick(record)}
+                className="py-4 px-1 text-sm font-semibold text-right cursor-pointer"
+              >
                 <span>
                   <ChevronRight />
                 </span>
