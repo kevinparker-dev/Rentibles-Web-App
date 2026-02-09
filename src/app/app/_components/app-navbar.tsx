@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 import ProfileMenu from "./ProfileMenu";
 import Logo from "@/src/components/icons/Logo";
 import ThemeToggle from "@/src/components/common/ThemeToggle";

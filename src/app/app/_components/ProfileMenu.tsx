@@ -15,6 +15,7 @@ import Image from "next/image";
 import { logout } from "../../../lib/store/feature/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../lib/store/hooks";
 import { UserProfile } from "@/public/images/export";
+// import { useMounted } from "@/src/utils/helperFunctions";
 
 const NAV_LINKS = [
   { label: "Home", href: "/app/home" },
@@ -25,9 +26,11 @@ const NAV_LINKS = [
 ];
 
 const ProfileMenu = () => {
+  // const mounted = useMounted();
   const dispatch = useAppDispatch();
   const authState = useAppSelector((state: RootState) => state.auth);
   const { user, isAuthenticated } = authState;
+  // if (!mounted) return null;
 
   if (!isAuthenticated || !user) {
     return null;

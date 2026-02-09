@@ -1,3 +1,4 @@
+
 export const phoneFormatter = (input: string): string => {
   if (!input) return "";
 
@@ -33,7 +34,7 @@ export const base64ToFile = (base64: string, filename: string) => {
 };
 
 export function formatDateToMMDDYYYY(
-  dateString: string | null | undefined,
+  dateString: string | null | undefined | number,
 ): string {
   if (!dateString) return "—";
 
@@ -47,3 +48,4 @@ export function formatDateToMMDDYYYY(
 
   return `${month}/${day}/${year}`;
 }
+

@@ -102,3 +102,36 @@ export const identitySchema = z.object({
 });
 
 export type IdentityFormValues = z.infer<typeof identitySchema>;
+
+export const createProductSchema = z.object({
+  productName: z.string().min(3),
+  description: z.string().min(10),
+
+  quantity: z.number().min(1),
+  hourlyPrice: z.number().min(1),
+  dailyPrice: z.number().min(1),
+
+  category: z.string().min(1),
+  subCategory: z.string().min(1),
+
+  availableDays: z.array(z.string()).min(1),
+
+  pickupTime: z.string().min(1),
+  dropOffTime: z.string().min(1),
+
+  images: z.array(z.any()).min(4),
+  coverImage: z.any().refine((file) => file instanceof File, {
+    message: "Cover image is required",
+  }),
+
+  location: z.object({
+    lat: z.number(),
+    lng: z.number(),
+    address: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    country: z.string().optional(),
+  }),
+});
+
+export type CreateProductPayload = z.infer<typeof createProductSchema>;

@@ -206,3 +206,14 @@ export interface TransactionRecord {
 }
 
 export type TabType = "withdrawal" | "transaction";
+
+// types/schedule.types.ts
+export interface DaySchedule {
+  id: string;
+  day: string;
+  shortName: string;
+  enabled: boolean;
+  order: number;
+}
+
+export type DaysOfWeek = DaySchedule[];
