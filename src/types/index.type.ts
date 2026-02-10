@@ -241,3 +241,103 @@ export interface AddProductRequestFormData {
   productName: string;
   description: string;
 }
+// types/schedule.types.ts
+export interface DaySchedule {
+  id: string;
+  day: string;
+  shortName: string;
+  enabled: boolean;
+  order: number;
+}
+
+export type DaysOfWeek = DaySchedule[];
+
+// types/category.types.ts
+export interface Category {
+  _id: string;
+  name: string;
+  cover: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetCategoriesResponse {
+  success: boolean;
+  message: string;
+  data: Category[];
+}
+
+export interface CategoriesState {
+  categories: Category[];
+  isLoading: boolean;
+  error: string | null;
+  lastFetched: number | null;
+}
+
+export interface GetCategoriesParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export interface SubCategory {
+  _id: string;
+  name: string;
+  cover: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetSubCategoriesResponse {
+  success: boolean;
+  message: string;
+  data: SubCategory[];
+}
+
+export interface Location {
+  type: "Point";
+  coordinates: [number, number]; // [longitude, latitude]
+}
+
+export interface User {
+  _id: string;
+  uid: string;
+  name: string;
+  email: string;
+  phone: string; // keep as string since phone numbers can have leading zeros or country codes
+  profilePicture?: string;
+  address?: string;
+  apartment?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  zipCode?: number;
+  location?: Location;
+  identityStatus?: "not-provided" | "pending" | "approved" | "rejected";
+  isPhoneVerified?: boolean;
+  isEmailVerified?: boolean;
+  isProfileCompleted?: boolean;
+  isSeller?: boolean;
+  isDeactivatedByAdmin?: boolean;
+  isDeleted?: boolean;
+  isVerified?: boolean; // derived flag if needed
+  stripeAccountId?: string;
+  stripeBankId?: string;
+  stripeCustomerId?: string;
+  stripeProfileStatus?: "pending" | "approved" | "rejected";
+  signUpRecord?: string;
+  createdAt?: string; // ISO date string
+  updatedAt?: string; // ISO date string
+  veriffSessionId?: string | null;
+  faceImage?: string | null;
+  idFrontImage?: string | null;
+  idBackImage?: string | null;
+}
+
+export interface LocationSelect {
+  location: Location;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+}

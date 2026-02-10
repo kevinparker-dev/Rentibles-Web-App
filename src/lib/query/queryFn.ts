@@ -1,12 +1,16 @@
 import Cookies from "js-cookie";
 import { axiosInstance } from "../axiosInstance";
 import {
+  Category,
   CheckEmailPayload,
   CheckEmailResponse,
   ForgotPayload,
   ForgotResponse,
   ForgotVerifyOtpPayload,
   ForgotVerifyOtpResponse,
+  GetCategoriesParams,
+  GetCategoriesResponse,
+  GetSubCategoriesResponse,
   LoginPayload,
   LoginResponse,
   NewPasswordPayload,
@@ -110,5 +114,29 @@ export const socialRegister = async (
   payload: SocialRegisterPayload,
 ): Promise<SocialRegisterResponse> => {
   const { data } = await axiosInstance.post("/auth/socialRegister", payload);
+  return data;
+};
+
+export const createProduct = async (formData: FormData) => {
+  const response = await axiosInstance.post("/product", formData);
+  return response.data;
+};
+
+export const getCategories = async (): Promise<GetCategoriesResponse> => {
+  const { data } = await axiosInstance.get("/category");
+  return data;
+};
+
+export const getCategoriesWithParams = async (
+  params?: GetCategoriesParams,
+): Promise<GetCategoriesResponse> => {
+  const { data } = await axiosInstance.get("/category", { params });
+  return data;
+};
+
+export const getSubCategories = async (
+  categoryId: string,
+): Promise<GetSubCategoriesResponse> => {
+  const { data } = await axiosInstance.get(`/category/${categoryId}`);
   return data;
 };

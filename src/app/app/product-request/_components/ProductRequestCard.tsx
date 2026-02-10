@@ -35,18 +35,18 @@ const ProductRequestCard: React.FC<ProductRequestCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-5 border border-gray-200 relative group">
+    <div className="bg-white rounded-xl shadow-md p-5 border border-gray-200 relative group">
       {/* Delete Button */}
       <button
         onClick={handleDelete}
-        className="absolute top-4 right-4 p-2 rounded-lg bg-red-600 text-red-50 transition-all duration-200"
+        className="absolute top-4 right-4 p-2 rounded-lg bg-red-600 text-red-50 transition-all duration-200 hover:bg-red-700 cursor-pointer"
         aria-label="Delete product request"
       >
         <Trash2 className="w-5 h-5" />
       </button>
 
       {/* Product Name */}
-      <h3 className="text-lg font-bold text-gray-900 mb-2 pr-12">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2 pr-12">
         {request.productName}
       </h3>
 

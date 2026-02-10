@@ -33,7 +33,7 @@ export const base64ToFile = (base64: string, filename: string) => {
 };
 
 export function formatDateToMMDDYYYY(
-  dateString: string | null | undefined | Date,
+  dateString: string | null | undefined | number,
 ): string {
   if (!dateString) return "—";
 
@@ -47,3 +47,13 @@ export function formatDateToMMDDYYYY(
 
   return `${month}/${day}/${year}`;
 }
+
+export const toUnixTimestamp = (time: string): number => {
+  // Assume today's date, combine with time string
+  const today = new Date();
+  const [hours, minutes] = time.split(":").map(Number);
+
+  today.setHours(hours, minutes, 0, 0);
+
+  return Math.floor(today.getTime() / 1000); // convert ms → seconds
+};

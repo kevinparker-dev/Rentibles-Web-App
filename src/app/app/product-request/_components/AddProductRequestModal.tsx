@@ -21,7 +21,12 @@ import {
 } from "@/components/ui/select";
 
 import { PackagePlus } from "lucide-react";
-import { AddProductRequestFormData, Category } from "@/src/types/index.type";
+import {
+  AddProductRequestFormData,
+  Category,
+  DaysOfWeek,
+} from "@/src/types/index.type";
+import DaySelector from "./DaySelector";
 
 interface AddProductRequestModalProps {
   isOpen: boolean;
@@ -96,6 +101,16 @@ const AddProductRequestModal: React.FC<AddProductRequestModalProps> = ({
     onClose();
   };
 
+  const [selectedDays, setSelectedDays] = useState<DaysOfWeek>();
+
+  const handleDaysChange = (days: DaysOfWeek) => {
+    setSelectedDays(days);
+    console.log(
+      "Selected days:",
+      days.filter((d) => d.enabled).map((d) => d.day),
+    );
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[500px]">
@@ -145,6 +160,15 @@ const AddProductRequestModal: React.FC<AddProductRequestModalProps> = ({
                 {errors.categoryId}
               </p>
             )}
+          </div>
+
+          <div>
+            <DaySelector
+              selectedDays={selectedDays}
+              onChange={handleDaysChange}
+              label="Working Days"
+              showSelectedCount={true}
+            />
           </div>
 
           {/* Product Name Input */}

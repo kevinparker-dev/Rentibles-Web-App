@@ -1,10 +1,18 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import CategoryCard from "./category-card";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y } from "swiper/modules";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getCategories } from "@/src/lib/query/queryFn";
+import { useAppDispatch } from "@/src/lib/store/hooks";
+import {
+  setCategoriesError,
+  setCategoriesLoading,
+  setCategoriesSuccess,
+} from "@/src/lib/store/feature/appSlice";
 
 export const CATEGORIES = [
   { _id: "all", name: "All", cover: "" },
@@ -174,6 +182,7 @@ const Categories = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const selectedCategoryId = searchParams?.get("category") ?? "all";
 
@@ -194,6 +203,40 @@ const Categories = () => {
     const url = query ? `${pathname}?${query}` : pathname;
     router.replace(url);
   };
+
+  const {
+    data: categoriesData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["categories"], // Unique key for this query
+    queryFn: getCategories,
+    staleTime: 5 * 60 * 1000, // Data stays fresh for 5 minutes
+    // Optional: Additional configurations
+    // refetchOnWindowFocus: false,
+    // retry: 3,
+  });
+
+  console.log("categoriesData  dot Data--> ", categoriesData?.data);
+
+  // Store categories in Redux when data is fetched
+  useEffect(() => {
+    if (isLoading) {
+      dispatch(setCategoriesLoading(true));
+    }
+
+    if (categoriesData?.data) {
+      dispatch(setCategoriesSuccess(categoriesData.data));
+    }
+
+    if (isError && error) {
+      dispatch(
+        setCategoriesError(error.message || "Failed to fetch categories"),
+      );
+    }
+  }, [categoriesData, isLoading, isError, error, dispatch]);
 
   return (
     <div className="my-5">
