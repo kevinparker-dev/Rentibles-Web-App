@@ -170,7 +170,7 @@ const RegisterForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex h-full flex-col gap-4 px-1 overflow-y-auto scrollbar-hide"
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 ">
         <label htmlFor="profile-upload">
           {preview ? (
             <div className="w-17 h-17 rounded-full overflow-hidden border border-dashed border-orange-400 flex items-center justify-center bg-gray-50 cursor-pointer">
@@ -186,6 +186,7 @@ const RegisterForm = () => {
               alt="profile placeholder"
               width={68}
               height={68}
+              className="cursor-pointer"
             />
           )}
         </label>
@@ -273,10 +274,25 @@ const RegisterForm = () => {
         />
         <p>
           I Agree To The{" "}
-          <span className="text-[#F85E00]">Terms & Conditions</span> &{" "}
-          <span className="text-[#F85E00]">Privacy Policy</span>, And I
-          Authorize The Collection And Use Of Phone Number For Two-Factor
-          Authentication
+          <Link
+            href="https://www.rentibles.com/terms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#F85E00]"
+          >
+            Terms & Conditions
+          </Link>{" "}
+          &{" "}
+          <Link
+            href="https://www.rentibles.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#F85E00]"
+          >
+            Privacy Policy
+          </Link>
+          , And I Authorize The Collection And Use Of Phone Number For
+          Two-Factor Authentication
         </p>
       </div>
       {errors.terms && (

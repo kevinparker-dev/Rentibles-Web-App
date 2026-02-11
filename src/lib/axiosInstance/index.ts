@@ -2,8 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
-// const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const baseURL = "https://api.rentibles.com"
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// const baseURL = "https://api.rentibles.com";
 
 let cachedFingerprint: string | null = null;
 
@@ -23,7 +23,7 @@ async function getDeviceFingerprint(): Promise<string> {
 
 export const axiosInstance = axios.create({
   baseURL,
-  timeout: 10000,
+  timeout: 50000,
   headers: {
     Accept: "application/json",
   },

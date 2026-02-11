@@ -11,7 +11,7 @@ import { AlertCircle, Camera, ImagePlus, Plus, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import DaySelector from "./DaySelector";
-import { DaysOfWeek, LocationSelect, User } from "@/src/types/index.type";
+import { DaysOfWeek, User } from "@/src/types/index.type";
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct, getCategories } from "@/src/lib/query/queryFn";
@@ -27,6 +27,18 @@ import { getAxiosErrorMessage } from "@/src/utils/errorHandlers";
 import { toUnixTimestamp } from "@/src/utils/helperFunctions";
 import { ProductImagesInput } from "./ProductImagesInput";
 import { CoverImageInput } from "./CoverImageInput";
+
+type LocationData = {
+  country?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  address?: string;
+  location?: {
+    type: "Point";
+    coordinates: number[];
+  };
+};
 
 const TimeOptions = [
   { label: "06:00 AM", value: "06:00" },
@@ -49,6 +61,7 @@ const TimeOptions = [
 const CreateProductForm = () => {
   const dispatch = useAppDispatch();
   const [user, setUser] = useState<User>();
+  const [isMap, setIsMap] = useState<boolean>(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -65,7 +78,13 @@ const CreateProductForm = () => {
     city?: string;
     state?: string;
     country?: string;
+    location?: {
+      type: "Point";
+      coordinates: number[];
+    };
   } | null>(null);
+  console.log("🚀 ~ CreateProductForm ~ location:", location);
+
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedSubCategoryId, setSelectedSubCategoryId] =
     useState<string>("");
@@ -108,6 +127,7 @@ const CreateProductForm = () => {
 
   const handleDaysChange = (days: DaysOfWeek) => {
     setSelectedDays(days);
+    setValue("availableDays", ["1"], { shouldValidate: true });
   };
 
   const subCategoryOptions = useMemo(() => {
@@ -122,11 +142,13 @@ const CreateProductForm = () => {
     const categoryId = e.target.value;
     setSelectedCategoryId(categoryId);
     setSelectedSubCategoryId(""); // Reset subcategory when category changes
+    setValue("category", categoryId, { shouldValidate: true });
   };
 
   // Handle subcategory change
   const handleSubCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedSubCategoryId(e.target.value);
+    setValue("subCategory", e.target.value, { shouldValidate: true });
   };
 
   const {
@@ -151,12 +173,23 @@ const CreateProductForm = () => {
       hourlyPrice: "0",
       dailyPrice: "0",
       images: [],
-      coverImage: null,
-      location: undefined,
+      coverImage: undefined,
+      location: {
+        lat: 0,
+        lng: 0,
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+      },
     },
   });
 
-  const onLocationSelect = (loc: LocationSelect) => {
+  const onLocationSelect = (loc: LocationData) => {
+    if (!loc.location) {
+      throw new Error("Location is missing");
+    }
+
     const lat = loc.location.coordinates[1];
     const lng = loc.location.coordinates[0];
 
@@ -168,7 +201,8 @@ const CreateProductForm = () => {
       state: loc.state,
       country: loc.country,
     });
-    // setValue("location", { lat, lng });
+
+    setValue("location", { lat, lng }, { shouldValidate: true });
     // clearErrors("location");
   };
 
@@ -203,7 +237,7 @@ const CreateProductForm = () => {
 
     formData.append("pricePerHour", String(data.hourlyPrice));
     formData.append("pricePerDay", String(data.dailyPrice));
-    formData.append("pickupAddress", user?.address || "");
+    formData.append("pickupAddress", location?.address || "");
 
     // Available days
     selectedDays
@@ -213,11 +247,9 @@ const CreateProductForm = () => {
       });
 
     // Location
-    const longitude = locationValue?.coordinates[0]; // -81.22187770000001
-    const latitude = locationValue?.coordinates[1];
-    if (locationValue?.coordinates) {
-      formData.append("longitude", String(longitude));
-      formData.append("latitude", String(latitude));
+    if (locationValue) {
+      formData.append("longitude", String(location?.lng));
+      formData.append("latitude", String(location?.lat));
     }
 
     // Cover image
@@ -231,6 +263,74 @@ const CreateProductForm = () => {
     });
 
     createProductMutation.mutate(formData);
+  };
+
+  const handleSameAsProfile = () => {
+    setIsMap(false);
+    if (
+      !user?.location?.coordinates ||
+      user.location.coordinates.length !== 2
+    ) {
+      console.error("User location data is not available");
+      return;
+    }
+
+    const [lng, lat] = user.location.coordinates;
+
+    const userData: LocationData = {
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      country: user.country,
+      // zipCode: user.zipCode,
+      location: {
+        type: "Point",
+        coordinates: [lng, lat],
+      },
+    };
+
+    // Update the location state
+    setLocation({
+      lat,
+      lng,
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      country: user.country,
+    });
+
+    // Update the form location field
+    setValue("location", {
+      lat,
+      lng,
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      country: user.country,
+    });
+
+    clearErrors("location");
+
+    console.log("📍 Profile location applied:", userData);
+  };
+
+  const handleClearLocation = () => {
+    // Clear location state
+    setLocation(null);
+
+    // Clear form location field
+    setValue("location", {
+      lat: 0,
+      lng: 0,
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+    });
+
+    // Clear validation errors
+    clearErrors("location");
+    setIsMap(true);
   };
 
   return (
@@ -253,12 +353,14 @@ const CreateProductForm = () => {
 
           <CoverImageInput
             value={watch("coverImage")}
-            onChange={(file) =>
-              setValue("coverImage", file, {
-                shouldValidate: true,
-                shouldDirty: true,
-              })
-            }
+            onChange={(file) => {
+              if (file) {
+                setValue("coverImage", file, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }
+            }}
             error={errors.coverImage?.message as string}
           />
         </div>
@@ -292,6 +394,7 @@ const CreateProductForm = () => {
               placeholder="Select Category"
               options={categoryOptions}
               onChange={handleCategoryChange}
+              error={errors?.category?.message}
             />
           </div>
 
@@ -308,6 +411,7 @@ const CreateProductForm = () => {
                 // value={selectedSubCategoryId}
                 onChange={handleSubCategoryChange}
                 disabled={isSubCategoriesLoading || !selectedCategoryId}
+                error={errors?.subCategory?.message}
               />
             )}
 
@@ -318,6 +422,11 @@ const CreateProductForm = () => {
                 label="Working Days"
                 showSelectedCount={true}
               />
+              {errors?.availableDays && (
+                <p className="text-red-600 text-sm font-medium">
+                  {errors?.availableDays?.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -364,23 +473,50 @@ const CreateProductForm = () => {
           />
         </div>
         <div className="flex gap-4 mt-6">
-          <button className="bg-[#F85E00] cursor-pointer h-12 rounded-xl px-6 text-sm font-medium">
+          <button
+            onClick={handleSameAsProfile}
+            type="button"
+            className="bg-[#F85E00] cursor-pointer h-12 rounded-xl px-6 text-sm font-medium"
+          >
             Same as Profile
           </button>
 
-          <button className="bg-foreground h-12  cursor-pointer rounded-xl px-6 flex items-center gap-2 text-sm font-medium">
+          <button
+            type="button"
+            onClick={handleClearLocation}
+            className="bg-foreground h-12  cursor-pointer rounded-xl px-6 flex items-center gap-2 text-sm font-medium"
+          >
             <Plus size={16} />
             Add New
           </button>
         </div>
 
-        <div className="mt-4">
-          <GoogleMapComponent onLocationSelect={onLocationSelect} />
+        {isMap && (
+          <p className="text-lg text-foreground mt-3"> Pickup Address</p>
+        )}
+        <div className="mt-3">
+          {/* <GoogleMapComponent onLocationSelect={onLocationSelect} /> */}
+          <GoogleMapComponent
+            onLocationSelect={onLocationSelect}
+            editAddress={{
+              address: location?.address,
+              city: location?.city,
+              state: location?.state,
+              country: location?.country,
+              // zipCode: location?.zipCode,
+              location: {
+                type: "Point",
+                coordinates: [location?.lng || 0, location?.lat || 0],
+              },
+            }}
+            isClear={location === null}
+            error={errors?.location?.message}
+          />
         </div>
-        <div className="flex items-start gap-2 mt-6 text-sm text-muted-foreground">
+        <div className="flex items-start gap-2 my-6 text-sm text-muted-foreground">
           <AlertCircle size={16} />
           <p>
-            Every booking comes with peace of mind! You'll get an email to
+            Every booking comes with peace of mind! You&apos;ll get an email to
             review and sign the contract before pickup-every time. No signature,
             no handoff.
           </p>

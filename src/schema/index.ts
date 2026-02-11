@@ -104,34 +104,96 @@ export const identitySchema = z.object({
 export type IdentityFormValues = z.infer<typeof identitySchema>;
 
 export const createProductSchema = z.object({
-  productName: z.string().min(3),
-  description: z.string().min(10),
+  productName: z
+    .string()
+    .min(3, { message: "Product name must be at least 3 characters" })
+    .trim(),
 
-  quantity: z.string().min(1),
-  hourlyPrice: z.string().min(1),
-  dailyPrice: z.string().min(1),
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters" })
+    .trim(),
 
-  // category: z.string().min(1),
-  // subCategory: z.string().min(1),
-
-  // availableDays: z.array(z.string()).min(1),
-
-  pickupTime: z.string().min(1),
-  dropOffTime: z.string().min(1),
-
-  images: z.array(z.any()).min(4),
-  coverImage: z.any().refine((file) => file instanceof File, {
-    message: "Cover image is required",
+  quantity: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+    message: "Quantity must be a positive number",
   }),
 
-  // location: z.object({
-  //   lat: z.number(),
-  //   lng: z.number(),
-  //   address: z.string().optional(),
-  //   city: z.string().optional(),
-  //   state: z.string().optional(),
-  //   country: z.string().optional(),
-  // }),
+  hourlyPrice: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+      message: "Hourly price must be a positive number",
+    }),
+
+  dailyPrice: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+      message: "Daily price must be a positive number",
+    }),
+
+  pickupTime: z.string().min(1, { message: "Pickup time is required" }),
+
+  dropOffTime: z.string().min(1, { message: "Drop-off time is required" }),
+
+  images: z
+    .array(
+      z.instanceof(File, {
+        message: "Each image must be a valid file",
+      }),
+    )
+    .min(4, { message: "At least 4 product images are required" })
+    .max(10, { message: "Maximum 10 images allowed" }),
+
+  coverImage: z
+    .instanceof(File, {
+      message: "Cover image must be a valid file",
+    })
+    .refine((file) => file.size > 0, { message: "Cover image is required" })
+    .refine(
+      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+      { message: "Cover image must be JPEG, PNG, or WebP" },
+    ),
+
+  category: z.string().min(1, { message: "Category is required" }),
+
+  subCategory: z.string().min(1, { message: "Sub-category is required" }),
+
+  availableDays: z
+    .array(z.string())
+    .min(1, { message: "At least one day must be selected" }),
+
+  location: z
+    .object({
+      lat: z
+        .number()
+        .min(-90, { message: "Invalid latitude" })
+        .max(90, { message: "Invalid latitude" }),
+      lng: z
+        .number()
+        .min(-180, { message: "Invalid longitude" })
+        .max(180, { message: "Invalid longitude" }),
+      address: z.string().optional(),
+      city: z.string().optional(),
+      state: z.string().optional(),
+      country: z.string().optional(),
+    })
+    .refine(
+      (location) => {
+        return (
+          location.lat !== 0 &&
+          location.lng !== 0 &&
+          !isNaN(location.lat) &&
+          !isNaN(location.lng) &&
+          location.lat >= -90 &&
+          location.lat <= 90 &&
+          location.lng >= -180 &&
+          location.lng <= 180
+        );
+      },
+      {
+        message:
+          "Location is required. Please select a valid address on the map.",
+      },
+    ),
 });
 
 export type CreateProductPayload = z.infer<typeof createProductSchema>;
