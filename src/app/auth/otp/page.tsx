@@ -76,7 +76,7 @@ const Page = () => {
   });
 
   return (
-    <div className="w-full  flex flex-col items-center p-6 justify-center md:w-125  rounded-[19px] bg-white">
+    <div className="w-full  flex flex-col items-center p-6 justify-center md:w-125  rounded-[19px] bg-background">
       <Image src={Otp_Icon} alt="otp" className="w-40" />
 
       <h2 className="text-3xl font-bold mt-6">Verify OTP</h2>

@@ -19,7 +19,6 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       const formattedValue = phoneFormatter(e.target.value);
       setValue(formattedValue);
 
-      
       if (onChange) {
         onChange({
           ...e,
@@ -35,7 +34,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       <div className="flex flex-col gap-1">
         <div
           className={`
-            flex items-center gap-3 bg-white rounded-md px-4 h-12 shadow-sm
+            flex items-center gap-3 bg-background rounded-md px-4 h-12 shadow-sm
             ${error ? "border border-red-500" : ""}
           `}
         >

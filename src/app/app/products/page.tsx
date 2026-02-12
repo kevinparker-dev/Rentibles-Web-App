@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { ArrowLeft, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Categories, { CATEGORIES } from "../home/_components/categories";
+import Categories from "../home/_components/categories";
 import ProductCard from "../home/_components/product-card";
 import Link from "next/link";
 

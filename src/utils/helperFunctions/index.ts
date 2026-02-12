@@ -57,3 +57,25 @@ export const toUnixTimestamp = (time: string): number => {
 
   return Math.floor(today.getTime() / 1000); // convert ms → seconds
 };
+
+export const getAddressFromLatLng = (
+  lat: number,
+  lng: number,
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    if (!window.google) {
+      reject("Google Maps not loaded");
+      return;
+    }
+
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      if (status === "OK" && results && results.length > 0) {
+        resolve(results[0].formatted_address);
+      } else {
+        reject("Unable to fetch address");
+      }
+    });
+  });
+};

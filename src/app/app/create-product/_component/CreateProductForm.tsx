@@ -83,7 +83,6 @@ const CreateProductForm = () => {
       coordinates: number[];
     };
   } | null>(null);
-  console.log("🚀 ~ CreateProductForm ~ location:", location);
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedSubCategoryId, setSelectedSubCategoryId] =

@@ -61,14 +61,14 @@ export const OtpInput = ({ value, onChange, error }: Props) => {
               w-16 h-16
               text-center
               rounded-lg
-              bg-white
+              bg-background
               border-2
               border-gray-300
               focus:border-orange-400
               focus:ring-1
               focus:ring-orange-400
               font-medium
-              text-black
+              text-foreground
               text-lg
               outline-none
             "

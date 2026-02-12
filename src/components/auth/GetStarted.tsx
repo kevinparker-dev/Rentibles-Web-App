@@ -53,7 +53,7 @@ const GetStarted = () => {
   };
   return (
     <div className="w-full h-auto flex justify-center">
-      <div className="w-full flex flex-col items-center p-6 md:w-125 rounded-[19px] bg-white">
+      <div className="w-full flex flex-col items-center p-6 md:w-125 rounded-[19px] bg-background">
         <Image src={OrangeLogo} alt="orange_logo" className="w-27" />
 
         <div className="w-full max-w-md flex flex-col gap-4 mt-10">

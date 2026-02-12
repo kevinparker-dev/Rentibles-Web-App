@@ -25,7 +25,7 @@ const OtpForm = ({
   timer,
 }: OtpFormProps) => {
   return (
-    <div className="w-full flex flex-col items-center justify-center md:w-125 rounded-[19px] bg-white">
+    <div className="w-full flex flex-col items-center justify-center md:w-125 rounded-[19px] bg-background">
       <p className="text-orange-400 mt-2 text-lg">
         00:{timer.toString().padStart(2, "0")}
       </p>

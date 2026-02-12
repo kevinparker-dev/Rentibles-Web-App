@@ -17,9 +17,13 @@ type Product = {
 
 interface SwiperProductsProps {
   products?: Product[];
+  isLoading: boolean;
 }
 
-const SwiperProducts: React.FC<SwiperProductsProps> = ({ products = [] }) => {
+const SwiperProducts: React.FC<SwiperProductsProps> = ({
+  products = [],
+  isLoading,
+}) => {
   const productCount = products.length || 8;
 
   return (
@@ -31,13 +35,17 @@ const SwiperProducts: React.FC<SwiperProductsProps> = ({ products = [] }) => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-4 gap-5">
-        {products.length > 0
-          ? products.map((p) => <ProductCard key={p._id} product={p} />)
-          : Array.from({ length: productCount }).map((_, index) => (
-              <ProductCard key={index} />
-            ))}
-      </div>
+      {isLoading ? (
+        <p>loading...</p>
+      ) : (
+        <div className="grid grid-cols-4 gap-5">
+          {products.length > 0
+            ? products.map((p) => <ProductCard key={p._id} product={p} />)
+            : Array.from({ length: productCount }).map((_, index) => (
+                <ProductCard key={index} />
+              ))}
+        </div>
+      )}
     </div>
   );
 };

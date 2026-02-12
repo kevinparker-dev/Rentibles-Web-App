@@ -294,6 +294,148 @@ export interface GetSubCategoriesResponse {
   data: SubCategory[];
 }
 
+// store type defined
+
+export interface Stores {
+  _id: string;
+  name: string;
+  email: string;
+  coverPicture: string;
+  profilePicture: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetStoresParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export interface GetStoresResponse {
+  success: boolean;
+  message: string;
+  data: Stores[];
+}
+
+//product type define
+
+export interface ProductCategory {
+  _id: string;
+  name: string;
+  cover: string;
+}
+
+export interface ProductSubCategory {
+  _id: string;
+  name: string;
+  cover: string;
+}
+
+export interface Products {
+  _id: string;
+  name: string;
+  category: ProductCategory;
+  subCategory: ProductSubCategory;
+  cover: string;
+  pricePerHour: number;
+  pricePerDay: number;
+  productReview: number;
+  isContracted: boolean;
+  isOwn: boolean;
+  isLiked: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetProductsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export interface GetProductsResponse {
+  success: boolean;
+  message: string;
+  data: Products[];
+}
+
+export interface ICategory {
+  _id: string;
+  name: string;
+  cover: string;
+}
+
+export interface ISubCategory {
+  _id: string;
+  name: string;
+  cover: string;
+}
+
+export interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: number;
+  profilePicture: string;
+}
+
+export interface IPickupLocation {
+  type: "Point";
+  coordinates: [number, number]; // [lng, lat]
+}
+
+export interface IProductDetails {
+  _id: string;
+  name: string;
+  description: string;
+
+  cover: string;
+  images: string[];
+
+  category: ICategory;
+  subCategory: ISubCategory;
+
+  user: IUser;
+  store: string | null;
+
+  quantity: number;
+  totalQuantity?: number;
+
+  pricePerDay: number;
+  pricePerHour: number;
+
+  availableDays: string[];
+  availabilities: unknown[]; // Change if you know structure
+
+  pickupAddress: string;
+  pickUpApartment: string;
+  pickupLocation: IPickupLocation;
+
+  pickupTime: number; // Unix timestamp
+  dropOffTime: number; // Unix timestamp
+
+  distance: string;
+
+  isActive: boolean;
+  isBooked: boolean;
+  isContracted: boolean;
+  isLiked: boolean;
+  isOwn: boolean;
+
+  productReview: number;
+
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+}
+
+export interface GetProductByIdResponse {
+  success: boolean;
+  message: string;
+  data: IProductDetails;
+}
+
 export interface Location {
   type: "Point";
   coordinates: [number, number]; // [longitude, latitude]

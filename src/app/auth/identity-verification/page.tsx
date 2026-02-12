@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const page = () => {
   return (
-    <div className="w-full  flex flex-col items-center p-6 justify-center md:w-125    rounded-[19px] bg-white">
+    <div className="w-full  flex flex-col items-center p-6 justify-center md:w-125    rounded-[19px] bg-background">
       <div>
         <Logout />
       </div>

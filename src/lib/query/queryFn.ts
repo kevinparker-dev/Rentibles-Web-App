@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import { axiosInstance } from "../axiosInstance";
 import {
-  Category,
   CheckEmailPayload,
   CheckEmailResponse,
   ForgotPayload,
@@ -10,6 +9,11 @@ import {
   ForgotVerifyOtpResponse,
   GetCategoriesParams,
   GetCategoriesResponse,
+  GetProductByIdResponse,
+  GetProductsParams,
+  GetProductsResponse,
+  GetStoresParams,
+  GetStoresResponse,
   GetSubCategoriesResponse,
   LoginPayload,
   LoginResponse,
@@ -122,6 +126,8 @@ export const createProduct = async (formData: FormData) => {
   return response.data;
 };
 
+// categories
+
 export const getCategories = async (): Promise<GetCategoriesResponse> => {
   const { data } = await axiosInstance.get("/category");
   return data;
@@ -138,5 +144,30 @@ export const getSubCategories = async (
   categoryId: string,
 ): Promise<GetSubCategoriesResponse> => {
   const { data } = await axiosInstance.get(`/category/${categoryId}`);
+  return data;
+};
+
+export const getStoresWithParams = async (
+  params?: GetStoresParams,
+): Promise<GetStoresResponse> => {
+  const { data } = await axiosInstance.get("/store", { params });
+  return data;
+};
+
+// products
+
+export const getProductsWithParams = async (
+  params?: GetProductsParams,
+): Promise<GetProductsResponse> => {
+  const { data } = await axiosInstance.get("/product", { params });
+  return data;
+};
+
+export const getProductById = async (
+  categoryId: string,
+): Promise<GetProductByIdResponse> => {
+  const { data } = await axiosInstance.get(
+    `/product/${categoryId}?longitude=123&latitude=123`,
+  );
   return data;
 };

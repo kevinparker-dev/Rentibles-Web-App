@@ -36,10 +36,10 @@ const SelectOtp = () => {
                   <Mail size={20} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-sm font-medium text-foreground">
                     Email address
                   </p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-xs text-foreground">{user?.email}</p>
                 </div>
               </div>
               {user?.isEmailVerified ? (
@@ -65,10 +65,10 @@ const SelectOtp = () => {
                   <Phone size={20} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-sm font-medium text-foreground">
                     Phone number
                   </p>
-                  <p className="text-xs text-gray-500">+1 {user?.phone}</p>
+                  <p className="text-xs text-foreground">+1 {user?.phone}</p>
                 </div>
               </div>
               {user?.isPhoneVerified ? (
